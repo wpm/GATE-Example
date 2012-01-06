@@ -61,8 +61,7 @@ public class StandAloneAnnie {
       annieController =
             (SerialAnalyserController) Factory.createResource(
                   "gate.creole.SerialAnalyserController", Factory.newFeatureMap(),
-                  Factory.newFeatureMap(), "ANNIE_"
-                  + Gate.genSym()
+                  Factory.newFeatureMap(), "ANNIE_"+ Gate.genSym()
             );
 
       // load each PR as defined in ANNIEConstants
