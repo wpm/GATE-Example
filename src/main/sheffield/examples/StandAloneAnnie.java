@@ -124,8 +124,8 @@ public class StandAloneAnnie {
          URL u = new URL(args[i]);
          FeatureMap params = Factory.newFeatureMap();
          params.put("sourceUrl", u);
-         params.put("preserveOriginalContent", new Boolean(true));
-         params.put("collectRepositioningInfo", new Boolean(true));
+         params.put("preserveOriginalContent", true);
+         params.put("collectRepositioningInfo", true);
          Out.prln("Creating doc for " + u);
          Document doc = (Document)
                Factory.createResource("gate.corpora.DocumentImpl", params);
@@ -177,15 +177,14 @@ public class StandAloneAnnie {
             StringBuffer editableContent = new StringBuffer(originalContent);
             long insertPositionEnd;
             long insertPositionStart;
-            // insert anotation tags backward
+            // insert annotation tags backward
             Out.prln("Unsorted annotations count:" + peopleAndPlaces.size());
             Out.prln("Sorted annotations count:" + sortedAnnotations.size());
             for (int i = sortedAnnotations.size() - 1; i >= 0; --i) {
                currAnnot = (Annotation) sortedAnnotations.get(i);
-               insertPositionStart =
-                     currAnnot.getStartNode().getOffset().longValue();
+               insertPositionStart = currAnnot.getStartNode().getOffset();
                insertPositionStart = info.getOriginalPos(insertPositionStart);
-               insertPositionEnd = currAnnot.getEndNode().getOffset().longValue();
+               insertPositionEnd = currAnnot.getEndNode().getOffset();
                insertPositionEnd = info.getOriginalPos(insertPositionEnd, true);
                if (insertPositionEnd != -1 && insertPositionStart != -1) {
                   editableContent.insert((int) insertPositionEnd, endTag);
@@ -223,8 +222,8 @@ public class StandAloneAnnie {
             Out.prln("Sorted annotations count:" + sortedAnnotations.size());
             for (int i = sortedAnnotations.size() - 1; i >= 0; --i) {
                currAnnot = (Annotation) sortedAnnotations.get(i);
-               insertPositionStart = currAnnot.getStartNode().getOffset().longValue();
-               insertPositionEnd = currAnnot.getEndNode().getOffset().longValue();
+               insertPositionStart = currAnnot.getStartNode().getOffset();
+               insertPositionEnd = currAnnot.getEndNode().getOffset();
                if (insertPositionEnd != -1 && insertPositionStart != -1) {
                   editableContent.insert((int) insertPositionEnd, endTag);
                   editableContent.insert((int) insertPositionStart, startTagPart_3);
@@ -246,13 +245,10 @@ public class StandAloneAnnie {
          }
 
          String xmlDocument = doc.toXml(peopleAndPlaces, false);
-         String fileName = new String("StANNIE_toXML_" + count + ".HTML");
+         String fileName = "StANNIE_toXML_" + count + ".HTML";
          FileWriter writer = new FileWriter(fileName);
          writer.write(xmlDocument);
          writer.close();
-
-         // do something usefull with the XML here!
-//      Out.prln("'"+xmlDocument+"'");
       } // for each doc
    } // main
 
@@ -265,7 +261,7 @@ public class StandAloneAnnie {
       } // SortedAnnotationList
 
       public boolean addSortedExclusive(Annotation annot) {
-         Annotation currAnot = null;
+         Annotation currAnot;
 
          // overlapping check
          for (int i = 0; i < size(); ++i) {
@@ -275,25 +271,20 @@ public class StandAloneAnnie {
             } // if
          } // for
 
-         long annotStart = annot.getStartNode().getOffset().longValue();
+         long annotStart = annot.getStartNode().getOffset();
          long currStart;
          // insert
          for (int i = 0; i < size(); ++i) {
             currAnot = (Annotation) get(i);
-            currStart = currAnot.getStartNode().getOffset().longValue();
+            currStart = currAnot.getStartNode().getOffset();
             if (annotStart < currStart) {
                insertElementAt(annot, i);
-               /*
-               Out.prln("Insert start: "+annotStart+" at position: "+i+" size="+size());
-               Out.prln("Current start: "+currStart);
-               */
                return true;
             } // if
          } // for
 
          int size = size();
          insertElementAt(annot, size);
-//Out.prln("Insert start: "+annotStart+" at size position: "+size);
          return true;
       } // addSorted
    } // SortedAnnotationList
