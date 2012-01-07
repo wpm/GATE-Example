@@ -109,7 +109,7 @@ public class StandAloneAnnie {
       // Load ANNIE plugin
       File gateHome = Gate.getGateHome();
       File pluginsHome = new File(gateHome, "plugins");
-      Gate.getCreoleRegister().registerDirectories(new File(pluginsHome, "ANNIE").toURL());
+      Gate.getCreoleRegister().registerDirectories(new File(pluginsHome, "ANNIE").toURI().toURL());
       Out.prln("...GATE initialised");
 
       // initialise ANNIE (this may take several minutes)

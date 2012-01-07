@@ -70,7 +70,7 @@ public class BatchProcessApp {
       // load the document (using the specified encoding if one was given)
       File docFile = new File(args[i]);
       System.out.print("Processing document " + docFile + "...");
-      Document doc = Factory.newDocument(docFile.toURL(), encoding);
+      Document doc = Factory.newDocument(docFile.toURI().toURL(), encoding);
 
       // put the document in the corpus
       corpus.add(doc);
@@ -81,7 +81,7 @@ public class BatchProcessApp {
       // remove the document from the corpus again
       corpus.clear();
 
-      String docXMLString = null;
+      String docXMLString;
       // if we want to just write out specific annotation types, we must
       // extract the annotations into a Set
       if(annotTypesToWrite != null) {
@@ -182,7 +182,7 @@ public class BatchProcessApp {
   /**
    * Print a usage message and exit.
    */
-  private static final void usage() {
+  private static void usage() {
     System.err.println(
    "Usage:\n" +
    "   java sheffield.examples.BatchProcessApp -g <gappFile> [-e encoding]\n" +
